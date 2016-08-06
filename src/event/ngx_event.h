@@ -76,11 +76,6 @@ struct ngx_event_s {
 
     unsigned         cancelable:1;
 
-#if (NGX_WIN32)
-    /* setsockopt(SO_UPDATE_ACCEPT_CONTEXT) was successful */
-    unsigned         accept_context_updated:1;
-#endif
-
 #if (NGX_HAVE_KQUEUE)
     unsigned         kq_vnode:1;
 
@@ -372,6 +367,9 @@ extern ngx_uint_t            ngx_use_epoll_rdhup;
 #define NGX_ONESHOT_EVENT  EPOLLONESHOT
 #endif
 
+#if (NGX_HAVE_EPOLLEXCLUSIVE)
+#define NGX_EXCLUSIVE_EVENT  EPOLLEXCLUSIVE
+#endif
 
 #elif (NGX_HAVE_POLL)
 
@@ -397,6 +395,11 @@ extern ngx_uint_t            ngx_use_epoll_rdhup;
 #define NGX_IOCP_ACCEPT      0
 #define NGX_IOCP_IO          1
 #define NGX_IOCP_CONNECT     2
+#endif
+
+
+#if (NGX_TEST_BUILD_EPOLL)
+#define NGX_EXCLUSIVE_EVENT  0
 #endif
 
 
