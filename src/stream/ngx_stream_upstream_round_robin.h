@@ -27,6 +27,7 @@ struct ngx_stream_upstream_rr_peer_s {
     ngx_int_t                        weight;
 
     ngx_uint_t                       conns;
+    ngx_uint_t                       max_conns;
 
     ngx_uint_t                       fails;
     time_t                           accessed;
@@ -42,11 +43,11 @@ struct ngx_stream_upstream_rr_peer_s {
     int                              ssl_session_len;
 #endif
 
-    ngx_stream_upstream_rr_peer_t   *next;
-
 #if (NGX_STREAM_UPSTREAM_ZONE)
     ngx_atomic_t                     lock;
 #endif
+
+    ngx_stream_upstream_rr_peer_t   *next;
 };
 
 
