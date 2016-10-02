@@ -35,8 +35,10 @@ struct ngx_http_upstream_rr_peer_s {
 
     ngx_uint_t                      max_fails;
     time_t                          fail_timeout;
+    ngx_msec_t                      slow_start;
+    ngx_msec_t                      start_time;
 
-    ngx_uint_t                      down;          /* unsigned  down:1; */
+    ngx_uint_t                      down;
 
 #if (NGX_HTTP_SSL)
     void                           *ssl_session;
@@ -120,6 +122,7 @@ struct ngx_http_upstream_rr_peers_s {
 
 
 typedef struct {
+    ngx_uint_t                      config;
     ngx_http_upstream_rr_peers_t   *peers;
     ngx_http_upstream_rr_peer_t    *current;
     uintptr_t                      *tried;
