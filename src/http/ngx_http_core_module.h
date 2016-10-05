@@ -68,15 +68,12 @@ typedef struct {
 #if (NGX_HTTP_SSL)
     unsigned                   ssl:1;
 #endif
-#if (NGX_HTTP_V2)
     unsigned                   http2:1;
-#endif
-#if (NGX_HAVE_INET6 && defined IPV6_V6ONLY)
+#if (NGX_HAVE_INET6)
     unsigned                   ipv6only:1;
 #endif
-#if (NGX_HAVE_REUSEPORT)
+    unsigned                   deferred_accept:1;
     unsigned                   reuseport:1;
-#endif
     unsigned                   so_keepalive:2;
     unsigned                   proxy_protocol:1;
 
@@ -97,9 +94,6 @@ typedef struct {
 
 #if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
     char                      *accept_filter;
-#endif
-#if (NGX_HAVE_DEFERRED_ACCEPT && defined TCP_DEFER_ACCEPT)
-    ngx_uint_t                 deferred_accept;
 #endif
 
     u_char                     addr[NGX_SOCKADDR_STRLEN + 1];
@@ -237,9 +231,7 @@ struct ngx_http_addr_conf_s {
 #if (NGX_HTTP_SSL)
     unsigned                   ssl:1;
 #endif
-#if (NGX_HTTP_V2)
     unsigned                   http2:1;
-#endif
     unsigned                   proxy_protocol:1;
 };
 
@@ -327,9 +319,7 @@ struct ngx_http_core_loc_conf_s {
     unsigned      auto_redirect:1;
 #if (NGX_HTTP_GZIP)
     unsigned      gzip_disable_msie6:2;
-#if (NGX_HTTP_DEGRADATION)
     unsigned      gzip_disable_degradation:2;
-#endif
 #endif
 
     ngx_http_location_tree_node_t   *static_locations;

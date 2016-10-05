@@ -66,22 +66,18 @@ struct ngx_listening_s {
     unsigned            addr_ntop:1;
     unsigned            wildcard:1;
 
-#if (NGX_HAVE_INET6 && defined IPV6_V6ONLY)
+#if (NGX_HAVE_INET6)
     unsigned            ipv6only:1;
 #endif
-#if (NGX_HAVE_REUSEPORT)
     unsigned            reuseport:1;
     unsigned            add_reuseport:1;
-#endif
     unsigned            keepalive:2;
 
-#if (NGX_HAVE_DEFERRED_ACCEPT)
     unsigned            deferred_accept:1;
     unsigned            delete_deferred:1;
     unsigned            add_deferred:1;
-#ifdef SO_ACCEPTFILTER
+#if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
     char               *accept_filter;
-#endif
 #endif
 #if (NGX_HAVE_SETFIB)
     int                 setfib;
