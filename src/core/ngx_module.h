@@ -35,13 +35,13 @@
 #define NGX_MODULE_SIGNATURE_2   "0"
 #endif
 
-#if (NGX_HAVE_FILE_AIO)
+#if (NGX_HAVE_FILE_AIO || NGX_COMPAT)
 #define NGX_MODULE_SIGNATURE_3   "1"
 #else
 #define NGX_MODULE_SIGNATURE_3   "0"
 #endif
 
-#if (NGX_HAVE_AIO_SENDFILE)
+#if (NGX_HAVE_AIO_SENDFILE || NGX_COMPAT)
 #define NGX_MODULE_SIGNATURE_4   "1"
 #else
 #define NGX_MODULE_SIGNATURE_4   "0"
@@ -127,7 +127,7 @@
 #define NGX_MODULE_SIGNATURE_21  "0"
 #endif
 
-#if (NGX_THREADS)
+#if (NGX_THREADS || NGX_COMPAT)
 #define NGX_MODULE_SIGNATURE_22  "1"
 #else
 #define NGX_MODULE_SIGNATURE_22  "0"
@@ -139,7 +139,7 @@
 #define NGX_MODULE_SIGNATURE_23  "0"
 #endif
 
-#if (NGX_HTTP_SSL)
+#if (NGX_HTTP_SSL || NGX_COMPAT)
 #define NGX_MODULE_SIGNATURE_24  "1"
 #else
 #define NGX_MODULE_SIGNATURE_24  "0"

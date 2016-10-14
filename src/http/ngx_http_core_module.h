@@ -15,6 +15,8 @@
 
 #if (NGX_THREADS)
 #include <ngx_thread_pool.h>
+#elif (NGX_COMPAT)
+typedef struct ngx_thread_pool_s  ngx_thread_pool_t;
 #endif
 
 
@@ -65,9 +67,7 @@ typedef struct {
     unsigned                   default_server:1;
     unsigned                   bind:1;
     unsigned                   wildcard:1;
-#if (NGX_HTTP_SSL)
     unsigned                   ssl:1;
-#endif
     unsigned                   http2:1;
 #if (NGX_HAVE_INET6)
     unsigned                   ipv6only:1;
@@ -228,9 +228,7 @@ struct ngx_http_addr_conf_s {
 
     ngx_http_virtual_names_t  *virtual_names;
 
-#if (NGX_HTTP_SSL)
     unsigned                   ssl:1;
-#endif
     unsigned                   http2:1;
     unsigned                   proxy_protocol:1;
 };
@@ -409,7 +407,7 @@ struct ngx_http_core_loc_conf_s {
 #endif
 #endif
 
-#if (NGX_THREADS)
+#if (NGX_THREADS || NGX_COMPAT)
     ngx_thread_pool_t         *thread_pool;
     ngx_http_complex_value_t  *thread_pool_value;
 #endif

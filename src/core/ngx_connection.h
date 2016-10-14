@@ -147,7 +147,7 @@ struct ngx_connection_s {
     ngx_str_t           proxy_protocol_addr;
     in_port_t           proxy_protocol_port;
 
-#if (NGX_SSL)
+#if (NGX_SSL || NGX_COMPAT)
     ngx_ssl_connection_t  *ssl;
 #endif
 
@@ -182,11 +182,11 @@ struct ngx_connection_s {
 
     unsigned            need_last_buf:1;
 
-#if (NGX_HAVE_AIO_SENDFILE)
+#if (NGX_HAVE_AIO_SENDFILE || NGX_COMPAT)
     unsigned            busy_count:2;
 #endif
 
-#if (NGX_THREADS)
+#if (NGX_THREADS || NGX_COMPAT)
     ngx_thread_task_t  *sendfile_task;
 #endif
 };
