@@ -1696,7 +1696,10 @@ ngx_http_upstream_ssl_name(ngx_http_request_t *r, ngx_http_upstream_t *u,
     ngx_log_debug1(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
                    "upstream SSL server name: \"%s\"", name.data);
 
-    if (SSL_set_tlsext_host_name(c->ssl->connection, name.data) == 0) {
+    if (SSL_set_tlsext_host_name(c->ssl->connection,
+                                 (char *) name.data)
+        == 0)
+    {
         ngx_ssl_error(NGX_LOG_ERR, r->connection->log, 0,
                       "SSL_set_tlsext_host_name(\"%s\") failed", name.data);
         return NGX_ERROR;
@@ -6021,12 +6024,7 @@ ngx_http_upstream_hide_headers_hash(ngx_conf_t *cf,
 
         conf->hide_headers_hash = prev->hide_headers_hash;
 
-        if (conf->hide_headers_hash.buckets
-#if (NGX_HTTP_CACHE)
-            && ((conf->cache == 0) == (prev->cache == 0))
-#endif
-           )
-        {
+        if (conf->hide_headers_hash.buckets) {
             return NGX_OK;
         }
 
@@ -6111,7 +6109,23 @@ ngx_http_upstream_hide_headers_hash(ngx_conf_t *cf,
     hash->pool = cf->pool;
     hash->temp_pool = NULL;
 
-    return ngx_hash_init(hash, hide_headers.elts, hide_headers.nelts);
+    if (ngx_hash_init(hash, hide_headers.elts, hide_headers.nelts) != NGX_OK) {
+        return NGX_ERROR;
+    }
+
+    /*
+     * special handling to preserve conf->hide_headers_hash
+     * in the "http" section to inherit it to all servers
+     */
+
+    if (prev->hide_headers_hash.buckets == NULL
+        && conf->hide_headers == prev->hide_headers
+        && conf->pass_headers == prev->pass_headers)
+    {
+        prev->hide_headers_hash = conf->hide_headers_hash;
+    }
+
+    return NGX_OK;
 }
 
 
